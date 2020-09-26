@@ -1,28 +1,28 @@
-import React, { useContext } from "react";
-import { Switch, Route } from "react-router-dom";
-import { AppContext } from "./AppContext";
-import {PageNotFound} from "./Page_not_found/Page_not_found";
+import React, {useContext} from "react";
+import {Route, Switch} from "react-router-dom";
+import {AppContext} from "./AppContext";
+import {PageNotFound} from "./PageNotFound/PageNotFound";
+import {paths} from "./utils/route_paths";
 
 function App() {
   const {
     globalState: { name },
   } = useContext(AppContext);
 
-  const paths = { login: "login", notes: "notes" };
+const {login, notes} = paths;
   return (
     <div className="App">
       <header className="App-header">{name}</header>
       <Switch>
-        <Route exact path={paths.login}>
+        <Route exact path={login}>
           {/*Here Login Component*/}
         </Route>
-        <Route exact path={paths.notes}>
+        <Route exact path={notes}>
           {/* Here Notes Component*/}
         </Route>
-          <Route path="*">
-
-          <PageNotFound/>
-          </Route>
+        <Route path="*">
+          <PageNotFound />
+        </Route>
       </Switch>
     </div>
   );
