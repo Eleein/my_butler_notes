@@ -18,6 +18,7 @@ export function Login() {
             <input
               type="email"
               id="email"
+              required
               value={email}
               placeholder="email"
               onChange={({ target: { value } }) =>
@@ -30,6 +31,7 @@ export function Login() {
           <input
             type="password"
             id="password"
+            required
             value={password}
             placeholder="password"
             onChange={({ target: { value } }) =>
