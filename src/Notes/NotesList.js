@@ -2,11 +2,26 @@ import React, { useState, useEffect } from "react";
 import { notes } from "../api/api";
 
 export function NotesList() {
-  const [noteText, setNoteText] = useState("");
-  const [notesList, setNotesList] = useState([]);
+  const [state, setState] = useState({
+    noteText: "",
+    notesList: [],
+    updateNoteList: 0,
+  });
+
+  const updateState = (newState) => {
+    setState((state) => ({
+      ...state,
+      ...newState,
+    }));
+  };
 
   async function postNote(event) {
     event.preventDefault();
+
+    // If the noteText is blank, then exit this function
+    if (state.noteText.trim() === "") {
+      return;
+    }
     await notes({
       method: "post",
       data: {
@@ -17,10 +32,11 @@ export function NotesList() {
           mailbutler_message_id: "",
           contact_id: "",
         },
-        text: noteText,
+        text: state.noteText,
         team_id: "",
       },
     });
+    updateState({ noteText: "", updateNoteList: ++state.updateNoteList });
     /*get all the notes*/
   }
   useEffect(() => {
@@ -28,23 +44,23 @@ export function NotesList() {
       const response = await notes({
         method: "get",
       });
-      setNotesList(response);
+      updateState({ notesList: response });
     }
     getNotes();
-  }, []);
+  }, [state.updateNoteList]);
 
   return (
     <div>
       <form onSubmit={postNote}>
         <textarea
           placeholder="write your note here"
-          value={noteText}
-          onChange={({ target: { value } }) => setNoteText(value)}
+          value={state.noteText}
+          onChange={({ target: { value } }) => updateState({ noteText: value })}
         />
         <button>Add Note</button>
       </form>
       <ul>
-        {notesList.map((note) => (
+        {state.notesList.map((note) => (
           <li>{note.text}</li>
         ))}
       </ul>
