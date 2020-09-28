@@ -1,10 +1,10 @@
 import axios from "axios";
 
 export async function authenticateUser(email, password) {
-  const response = axios.post("/users/login", { email, password });
+  const response = await axios.post("/users/login", { email, password });
   const { token } = response.data;
   //set a global property value(authorization header) for every call
-  axios.defaults.headers.common["Autorization"] = `Bearer ${token}`;
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   return token;
 }
 

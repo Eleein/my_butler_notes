@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import styles from "./Login.module.scss";
 import { AppContext } from "../AppContext";
+import { authenticateUser } from "../api/api";
 
 export function Login() {
   const {
@@ -8,11 +9,23 @@ export function Login() {
     updateGlobalState,
   } = useContext(AppContext);
 
+  async function loginUser(event) {
+    event.preventDefault();
+    try {
+      const isLoggedIn = await authenticateUser(email, password);
+      updateGlobalState({ isLoggedIn });
+    } catch (error) {
+      alert(
+        "Unable to authenticate. Please, check your user name, password or Internet connection"
+      );
+    }
+  }
+
   return (
     <div className={styles.loginLayout}>
       <div className={styles.formLayout}>
         <h1>Login</h1>
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={loginUser} autoComplete="off">
           <label htmlFor="email">Email:</label>
           <div className={styles.emailField}>
             <input
