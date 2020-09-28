@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { notes } from "../api/api";
 
 export function NotesList() {
   const [noteText, setNoteText] = useState("");
+  const [notesList, setNotesList] = useState([]);
 
- async function postNote(event) {
-     event.preventDefault();
-   await notes({
+  async function postNote(event) {
+    event.preventDefault();
+    await notes({
       method: "post",
       data: {
         context: {
@@ -20,8 +21,18 @@ export function NotesList() {
         team_id: "",
       },
     });
-   /*get all the notes*/
+    /*get all the notes*/
   }
+  useEffect(() => {
+    async function getNotes() {
+      const response = await notes({
+        method: "get",
+      });
+      setNotesList(response);
+    }
+    getNotes();
+  }, []);
+
   return (
     <div>
       <form onSubmit={postNote}>
@@ -32,6 +43,11 @@ export function NotesList() {
         />
         <button>Add Note</button>
       </form>
+      <ul>
+        {notesList.map((note) => (
+          <li>{note.text}</li>
+        ))}
+      </ul>
     </div>
   );
 }
