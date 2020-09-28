@@ -1,1 +1,1 @@
-export const paths = { login: "/", notes: "/notes" };
+export const paths = { login: "/" };
