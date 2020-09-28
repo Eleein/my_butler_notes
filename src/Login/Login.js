@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styles from "./Login.module.scss";
 import { AppContext } from "../AppContext";
-import { authenticateUser } from "../api/authentication";
+import { authenticateUser } from "../api/api";
 
 export function Login() {
   const {
@@ -12,8 +12,8 @@ export function Login() {
   async function loginUser(event) {
     event.preventDefault();
     try {
-      const authToken = await authenticateUser(email, password);
-      updateGlobalState(authToken);
+      const isLoggedIn = await authenticateUser(email, password);
+      updateGlobalState({ isLoggedIn });
     } catch (error) {
       alert(
         "Unable to authenticate. Please, check your user name, password or Internet connection"
