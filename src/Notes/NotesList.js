@@ -49,6 +49,11 @@ export function NotesList() {
     getNotes();
   }, [state.updateNoteList]);
 
+  async function deleteNote({ id }) {
+    await notes({ method: "delete", id });
+    const updatedList = state.notesList.filter((note) => note.id !== id);
+    updateState({ notesList: updatedList });
+  }
   return (
     <div>
       <form onSubmit={postNote}>
@@ -61,7 +66,12 @@ export function NotesList() {
       </form>
       <ul>
         {state.notesList.map((note) => (
-          <li>{note.text}</li>
+          <li>
+            {note.text}
+            <button type="button" onClick={()=> deleteNote(note)}>
+              delete
+            </button>
+          </li>
         ))}
       </ul>
     </div>
