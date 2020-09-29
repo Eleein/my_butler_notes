@@ -22,38 +22,68 @@ export function NotesList() {
     if (state.noteText.trim() === "") {
       return;
     }
-    await notes({
-      method: "post",
-      data: {
-        context: {
-          message_id: "",
-          gmail_message_id: "",
-          gmail_draft_id: "",
-          mailbutler_message_id: "",
-          contact_id: "",
-        },
-        text: state.noteText,
-        team_id: "",
-      },
-    });
-    updateState({ noteText: "", updateNoteList: ++state.updateNoteList });
-    /*get all the notes*/
+    try {
+      await notes({
+        method: "post",
+        data: createNote(state.noteText),
+      });
+      updateState({ noteText: "", updateNoteList: ++state.updateNoteList });
+    } catch (e) {
+      alert(e);
+    }
   }
+
   useEffect(() => {
     async function getNotes() {
-      const response = await notes({
-        method: "get",
-      });
-      updateState({ notesList: response });
+      try {
+        const response = await notes({
+          method: "get",
+        });
+        updateState({ notesList: response });
+      } catch (e) {
+        alert(e);
+      }
     }
     getNotes();
   }, [state.updateNoteList]);
 
   async function deleteNote({ id }) {
-    await notes({ method: "delete", id });
-    const updatedList = state.notesList.filter((note) => note.id !== id);
-    updateState({ notesList: updatedList });
+    try {
+      await notes({ method: "delete", id });
+      const updatedList = state.notesList.filter((note) => note.id !== id);
+      updateState({ notesList: updatedList });
+    } catch (e) {
+      alert(e);
+    }
   }
+
+  function toggleEditMode({ id, isEditMode }) {
+    const newNotesList = state.notesList.map((note) => {
+      return note.id === id ? { ...note, isEditMode: !isEditMode } : note;
+    });
+    updateState({ notesList: newNotesList });
+  }
+
+  function editNote(id, text) {
+    const newNotesList = state.notesList.map((note) => {
+      return note.id === id ? { ...note, text } : note;
+    });
+    updateState({ notesList: newNotesList });
+  }
+
+  async function saveNote(note) {
+    try {
+      await notes({ method: "put", data: note, id: note.id });
+      toggleEditMode(note);
+    } catch (e) {
+      alert(e);
+    }
+  }
+
+  function cancelEdit() {
+    updateState({ updateNoteList: ++state.updateNoteList });
+  }
+
   return (
     <div>
       <form onSubmit={postNote}>
@@ -67,8 +97,29 @@ export function NotesList() {
       <ul>
         {state.notesList.map((note) => (
           <li>
-            {note.text}
-            <button type="button" onClick={()=> deleteNote(note)}>
+            {note.isEditMode ? (
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  saveNote(note);
+                }}
+              >
+                <input
+                  value={note.text}
+                  onChange={(event) => editNote(note.id, event.target.value)}
+                />
+                <button type="button" onClick={cancelEdit}>
+                  cancel
+                </button>
+                <button>save</button>
+              </form>
+            ) : (
+              note.text
+            )}
+            <button type="button" onClick={() => toggleEditMode(note)}>
+              {note.isEditMode ? "cancel" : "edit"}
+            </button>
+            <button type="button" onClick={() => deleteNote(note)}>
               delete
             </button>
           </li>
@@ -76,4 +127,18 @@ export function NotesList() {
       </ul>
     </div>
   );
+}
+
+function createNote(text) {
+  return {
+    context: {
+      message_id: "",
+      gmail_message_id: "",
+      gmail_draft_id: "",
+      mailbutler_message_id: "",
+      contact_id: "",
+    },
+    text,
+    team_id: "",
+  };
 }
