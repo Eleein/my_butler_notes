@@ -22,37 +22,41 @@ export function NotesList() {
     if (state.noteText.trim() === "") {
       return;
     }
-    await notes({
-      method: "post",
-      data: {
-        context: {
-          message_id: "",
-          gmail_message_id: "",
-          gmail_draft_id: "",
-          mailbutler_message_id: "",
-          contact_id: "",
-        },
-        text: state.noteText,
-        team_id: "",
-      },
-    });
-    updateState({ noteText: "", updateNoteList: ++state.updateNoteList });
+    try {
+      await notes({
+        method: "post",
+        data: createNote(state.noteText),
+      });
+      updateState({ noteText: "", updateNoteList: ++state.updateNoteList });
+    } catch (e) {
+      alert(e);
+    }
   }
+
   useEffect(() => {
     async function getNotes() {
-      const response = await notes({
-        method: "get",
-      });
-      updateState({ notesList: response });
+      try {
+        const response = await notes({
+          method: "get",
+        });
+        updateState({ notesList: response });
+      } catch (e) {
+        alert(e);
+      }
     }
     getNotes();
   }, [state.updateNoteList]);
 
   async function deleteNote({ id }) {
-    await notes({ method: "delete", id });
-    const updatedList = state.notesList.filter((note) => note.id !== id);
-    updateState({ notesList: updatedList });
+    try {
+      await notes({ method: "delete", id });
+      const updatedList = state.notesList.filter((note) => note.id !== id);
+      updateState({ notesList: updatedList });
+    } catch (e) {
+      alert(e);
+    }
   }
+
   function toggleEditMode({ id, isEditMode }) {
     const newNotesList = state.notesList.map((note) => {
       return note.id === id ? { ...note, isEditMode: !isEditMode } : note;
@@ -68,8 +72,12 @@ export function NotesList() {
   }
 
   async function saveNote(note) {
-    await notes({ method: "put", data: note, id: note.id });
-    toggleEditMode(note);
+    try {
+      await notes({ method: "put", data: note, id: note.id });
+      toggleEditMode(note);
+    } catch (e) {
+      alert(e);
+    }
   }
 
   function cancelEdit() {
@@ -100,7 +108,9 @@ export function NotesList() {
                   value={note.text}
                   onChange={(event) => editNote(note.id, event.target.value)}
                 />
-                <button type="button" onClick={cancelEdit}>cancel</button>
+                <button type="button" onClick={cancelEdit}>
+                  cancel
+                </button>
                 <button>save</button>
               </form>
             ) : (
@@ -117,4 +127,18 @@ export function NotesList() {
       </ul>
     </div>
   );
+}
+
+function createNote(text) {
+  return {
+    context: {
+      message_id: "",
+      gmail_message_id: "",
+      gmail_draft_id: "",
+      mailbutler_message_id: "",
+      contact_id: "",
+    },
+    text,
+    team_id: "",
+  };
 }
