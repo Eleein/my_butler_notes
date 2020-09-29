@@ -1,5 +1,7 @@
 import axios from "axios";
 
+axios.defaults.baseURL = "https://bowtie.mailbutler.io/api/v2";
+
 export async function authenticateUser(email, password) {
   const response = await axios.post("/users/login", { email, password });
   const { token } = response.data;
