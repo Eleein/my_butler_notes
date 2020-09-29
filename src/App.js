@@ -6,7 +6,8 @@ import { ActionBar } from "./ActionBar/ActionBar";
 import { PageNotFound } from "./PageNotFound/PageNotFound";
 import { paths } from "./utils/route_paths";
 import { Login } from "./Login/Login";
-import {NotesList} from "./Notes/NotesList";
+import { NotesList } from "./Notes/NotesList";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const { login } = paths;
@@ -24,6 +25,17 @@ function App() {
           <PageNotFound />
         </Route>
       </Switch>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable={false}
+        pauseOnHover
+      />
     </div>
   );
 }

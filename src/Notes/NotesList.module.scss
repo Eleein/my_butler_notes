@@ -1,3 +1,5 @@
+@import "../theme";
+
 .noteForm {
   width: 75%;
   margin: 0 auto;
@@ -22,7 +24,7 @@
   background-color: #dfe3e6;
   padding: 0.5rem;
   width: 50%;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 .noteItem {
@@ -39,20 +41,15 @@
 }
 .btnLayout {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 .noteItemBtn {
+  @extend %button;
   font-family: "Roboto", sans-serif;
-  outline: 0;
   background: #95cebc;
   margin: 10px;
-  border: 0;
-  padding: 8px;
   color: #000;
   font-size: 14px;
-  cursor: pointer;
-  width: 80px;
-  border-radius: 10px;
 }
 .noteItemBtn:hover,
 .form button:active,
@@ -61,10 +58,8 @@
 }
 
 .addNotes {
-  border: 0;
-  padding: 8px 20px;
+  @extend %button;
   background: #fff;
-  border-radius: 10px;
   margin-top: 10px;
   font-weight: bold;
 }
