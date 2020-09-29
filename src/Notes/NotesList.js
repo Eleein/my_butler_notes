@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { notes } from "../api/api";
+import styles from "./NotesList.module.scss";
 
 export function NotesList() {
   const [state, setState] = useState({
@@ -86,17 +87,19 @@ export function NotesList() {
 
   return (
     <div>
-      <form onSubmit={postNote}>
-        <textarea
+      {/*Here goes the note to be added*/}
+      <form className={styles.noteForm} onSubmit={postNote}>
+        <textarea className={styles.noteArea}
           placeholder="write your note here"
           value={state.noteText}
           onChange={({ target: { value } }) => updateState({ noteText: value })}
         />
-        <button>Add Note</button>
+        <button className={styles.addNotes}>Add Note</button>
       </form>
-      <ul>
+      {/*HERE BEGINS THE LIST OF NOTES*/}
+      <ul className={styles.notesList}>
         {state.notesList.map((note) => (
-          <li>
+          <li className={styles.noteItem}>
             {note.isEditMode ? (
               <form
                 onSubmit={(event) => {
@@ -104,24 +107,30 @@ export function NotesList() {
                   saveNote(note);
                 }}
               >
-                <input
+                <textarea
+                    className={styles.noteArea}
+                    rows="7"
                   value={note.text}
                   onChange={(event) => editNote(note.id, event.target.value)}
                 />
-                <button type="button" onClick={cancelEdit}>
+                <button className={styles.noteItemBtn} type="button" onClick={cancelEdit}>
                   cancel
                 </button>
-                <button>save</button>
+                <button className={styles.noteItemBtn}>save</button>
               </form>
             ) : (
               note.text
             )}
-            <button type="button" onClick={() => toggleEditMode(note)}>
-              {note.isEditMode ? "cancel" : "edit"}
-            </button>
-            <button type="button" onClick={() => deleteNote(note)}>
-              delete
-            </button>
+            {!note.isEditMode && (
+              <div className={styles.btnLayout}>
+                <button  className={styles.noteItemBtn} type="button" onClick={() => toggleEditMode(note)}>
+                  edit
+                </button>
+                <button className={styles.noteItemBtn} type="button" onClick={() => deleteNote(note)}>
+                  delete
+                </button>
+              </div>
+            )}
           </li>
         ))}
       </ul>
