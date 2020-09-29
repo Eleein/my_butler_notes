@@ -87,8 +87,9 @@ export function NotesList() {
 
   return (
     <div>
-      <form onSubmit={postNote}>
-        <textarea
+      {/*Here goes the note to be added*/}
+      <form className={styles.noteForm} onSubmit={postNote}>
+        <textarea className={styles.noteArea}
           placeholder="write your note here"
           value={state.noteText}
           onChange={({ target: { value } }) => updateState({ noteText: value })}
