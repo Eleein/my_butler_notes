@@ -37,7 +37,6 @@ export function NotesList() {
       },
     });
     updateState({ noteText: "", updateNoteList: ++state.updateNoteList });
-    /*get all the notes*/
   }
   useEffect(() => {
     async function getNotes() {
@@ -54,6 +53,13 @@ export function NotesList() {
     const updatedList = state.notesList.filter((note) => note.id !== id);
     updateState({ notesList: updatedList });
   }
+  async function toggleEditMode({ id, isEditMode }) {
+    const newNotesList = state.notesList.map((note) => {
+      return note.id === id ? { ...note, isEditMode: !isEditMode } : note;
+    });
+    updateState({ notesList: newNotesList });
+  }
+
   return (
     <div>
       <form onSubmit={postNote}>
@@ -68,7 +74,10 @@ export function NotesList() {
         {state.notesList.map((note) => (
           <li>
             {note.text}
-            <button type="button" onClick={()=> deleteNote(note)}>
+            <button type="button" onClick={() => toggleEditMode(note)}>
+              {note.isEditMode ? "cancel" : "edit"}
+            </button>
+            <button type="button" onClick={() => deleteNote(note)}>
               delete
             </button>
           </li>
