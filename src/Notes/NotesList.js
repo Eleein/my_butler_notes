@@ -107,27 +107,28 @@ export function NotesList() {
                   saveNote(note);
                 }}
               >
-                <input
+                <textarea
+                    className={styles.editMode}
                   value={note.text}
                   onChange={(event) => editNote(note.id, event.target.value)}
                 />
-                <button type="button" onClick={cancelEdit}>
+                <button className={styles.noteItemBtn} type="button" onClick={cancelEdit}>
                   cancel
                 </button>
-                <button>save</button>
+                <button className={styles.noteItemBtn}>save</button>
               </form>
             ) : (
               note.text
             )}
             {!note.isEditMode && (
-              <>
-                <button type="button" onClick={() => toggleEditMode(note)}>
+              <div>
+                <button  className={styles.noteItemBtn} type="button" onClick={() => toggleEditMode(note)}>
                   edit
                 </button>
-                <button type="button" onClick={() => deleteNote(note)}>
+                <button className={styles.noteItemBtn} type="button" onClick={() => deleteNote(note)}>
                   delete
                 </button>
-              </>
+              </div>
             )}
           </li>
         ))}
