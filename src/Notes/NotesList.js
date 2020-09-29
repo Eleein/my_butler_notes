@@ -108,7 +108,8 @@ export function NotesList() {
                 }}
               >
                 <textarea
-                    className={styles.editMode}
+                    className={styles.noteArea}
+                    rows="7"
                   value={note.text}
                   onChange={(event) => editNote(note.id, event.target.value)}
                 />
@@ -121,7 +122,7 @@ export function NotesList() {
               note.text
             )}
             {!note.isEditMode && (
-              <div>
+              <div className={styles.btnLayout}>
                 <button  className={styles.noteItemBtn} type="button" onClick={() => toggleEditMode(note)}>
                   edit
                 </button>
