@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import styles from "./Login.module.scss";
 import { AppContext } from "../AppContext";
 import { authenticateUser } from "../api/api";
+import { toast } from 'react-toastify';
 
 export function Login() {
   const {
@@ -15,7 +16,7 @@ export function Login() {
       const isLoggedIn = await authenticateUser(email, password);
       updateGlobalState({ isLoggedIn });
     } catch (error) {
-      alert(
+      toast.error(
         "Unable to authenticate. Please, check your user name, password or Internet connection"
       );
     }

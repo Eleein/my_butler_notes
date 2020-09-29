@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import React, { useState, useEffect } from "react";
 import { notes } from "../api/api";
 import styles from "./NotesList.module.scss";
@@ -29,8 +30,9 @@ export function NotesList() {
         data: createNote(state.noteText),
       });
       updateState({ noteText: "", updateNoteList: ++state.updateNoteList });
+      toast.success("Note Added!");
     } catch (e) {
-      alert(e);
+      toast.error(e.message);
     }
   }
 
@@ -42,7 +44,7 @@ export function NotesList() {
         });
         updateState({ notesList: response });
       } catch (e) {
-        alert(e);
+        toast.error(e.message);
       }
     }
     getNotes();
@@ -53,8 +55,9 @@ export function NotesList() {
       await notes({ method: "delete", id });
       const updatedList = state.notesList.filter((note) => note.id !== id);
       updateState({ notesList: updatedList });
+      toast.success("Note Deleted!");
     } catch (e) {
-      alert(e);
+      toast.error(e.message);
     }
   }
 
@@ -76,8 +79,9 @@ export function NotesList() {
     try {
       await notes({ method: "put", data: note, id: note.id });
       toggleEditMode(note);
+      toast.success("Note Saved!");
     } catch (e) {
-      alert(e);
+      toast.error(e.message);
     }
   }
 
