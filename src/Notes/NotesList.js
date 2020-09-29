@@ -53,11 +53,27 @@ export function NotesList() {
     const updatedList = state.notesList.filter((note) => note.id !== id);
     updateState({ notesList: updatedList });
   }
-  async function toggleEditMode({ id, isEditMode }) {
+  function toggleEditMode({ id, isEditMode }) {
     const newNotesList = state.notesList.map((note) => {
       return note.id === id ? { ...note, isEditMode: !isEditMode } : note;
     });
     updateState({ notesList: newNotesList });
+  }
+
+  function editNote(id, text) {
+    const newNotesList = state.notesList.map((note) => {
+      return note.id === id ? { ...note, text } : note;
+    });
+    updateState({ notesList: newNotesList });
+  }
+
+  async function saveNote(note) {
+    await notes({ method: "put", data: note, id: note.id });
+    toggleEditMode(note);
+  }
+
+  function cancelEdit() {
+    updateState({ updateNoteList: ++state.updateNoteList });
   }
 
   return (
@@ -73,7 +89,23 @@ export function NotesList() {
       <ul>
         {state.notesList.map((note) => (
           <li>
-            {note.text}
+            {note.isEditMode ? (
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  saveNote(note);
+                }}
+              >
+                <input
+                  value={note.text}
+                  onChange={(event) => editNote(note.id, event.target.value)}
+                />
+                <button type="button" onClick={cancelEdit}>cancel</button>
+                <button>save</button>
+              </form>
+            ) : (
+              note.text
+            )}
             <button type="button" onClick={() => toggleEditMode(note)}>
               {note.isEditMode ? "cancel" : "edit"}
             </button>
