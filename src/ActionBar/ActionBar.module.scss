@@ -1,10 +1,12 @@
+@import "../theme";
+
 .actionBarLayout {
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
   background: #fff;
   padding: 20px;
-  box-shadow: 1px 6px 8px -3px rgba(120,119,120,1);
+  box-shadow: 1px 6px 8px -3px rgba(120, 119, 120, 1);
 }
 
 .logo {
@@ -12,9 +14,7 @@
 }
 
 .logoutButton {
-  background: #F2C264;
-  border: 0;
-  border-radius: 10px;
-  padding: 8px 20px;
+  background: #f2c264;
+  @extend %button;
   font-weight: bold;
 }

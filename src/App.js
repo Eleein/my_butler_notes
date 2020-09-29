@@ -8,7 +8,6 @@ import { paths } from "./utils/route_paths";
 import { Login } from "./Login/Login";
 import { NotesList } from "./Notes/NotesList";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const { login } = paths;
