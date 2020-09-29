@@ -1,0 +1,20 @@
+.actionBarLayout {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 1px 6px 8px -3px rgba(120,119,120,1);
+}
+
+.logo {
+  width: 132px;
+}
+
+.logoutButton {
+  background: #F2C264;
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 20px;
+  font-weight: bold;
+}

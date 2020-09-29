@@ -94,7 +94,7 @@ export function NotesList() {
           value={state.noteText}
           onChange={({ target: { value } }) => updateState({ noteText: value })}
         />
-        <button>Add Note</button>
+        <button className={styles.addNotes}>Add Note</button>
       </form>
       {/*HERE BEGINS THE LIST OF NOTES*/}
       <ul className={styles.notesList}>
