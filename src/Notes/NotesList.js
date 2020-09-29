@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { notes } from "../api/api";
+import styles from "./NotesList.module.scss";
 
 export function NotesList() {
   const [state, setState] = useState({
@@ -94,9 +95,10 @@ export function NotesList() {
         />
         <button>Add Note</button>
       </form>
-      <ul>
+      {/*HERE BEGINS THE LIST OF NOTES*/}
+      <ul className={styles.notesList}>
         {state.notesList.map((note) => (
-          <li>
+          <li className={styles.noteItem}>
             {note.isEditMode ? (
               <form
                 onSubmit={(event) => {
@@ -116,12 +118,16 @@ export function NotesList() {
             ) : (
               note.text
             )}
-            <button type="button" onClick={() => toggleEditMode(note)}>
-              {note.isEditMode ? "cancel" : "edit"}
-            </button>
-            <button type="button" onClick={() => deleteNote(note)}>
-              delete
-            </button>
+            {!note.isEditMode && (
+              <>
+                <button type="button" onClick={() => toggleEditMode(note)}>
+                  edit
+                </button>
+                <button type="button" onClick={() => deleteNote(note)}>
+                  delete
+                </button>
+              </>
+            )}
           </li>
         ))}
       </ul>

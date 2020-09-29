@@ -52,7 +52,7 @@ export function Login() {
             }
           />
 
-          <button>Login</button>
+          <button className={styles.login}>Login</button>
         </form>
       </div>
     </div>
